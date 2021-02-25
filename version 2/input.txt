@@ -1,0 +1,8 @@
+print("hello")
+print(a)
+print("hello")
+
+for i in range(10):
+    s=10
+    print('hello')
+print('he;;p')
