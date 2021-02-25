@@ -3,7 +3,7 @@ import re
 #import ply.yacc as yacc
 
 tokens = ['NAME','STR_CONST','ID','INT','FLOAT','PLUS','MINUS','MULTIPLY','MOD','DIVIDE','COMMA','COLON','PARANOPEN','PARANCLOSE','EMP_LIST','EMP_TUPLE','EMP_SET','FLOWEROPEN','FLOWERCLOSE','EQUAL','GREATER','LESSER','GREATEREQ','LESSEREQ','EQEQ','NOTEQ','BIT_AND','BIT_OR','NEWLINE','LEVEL3','LEVEL2','LEVEL1']
-reserved = {'#': 'HASH', 'if':'IF','in':'IN','for':'FOR','range':'RANGE','print':'PRINT','True':'BOOL','False':'BOOL','and':'AND','or':'OR','while':'WHILE','def':'DEF'}
+reserved = {'len':'LEN','#': 'HASH', 'if':'IF','in':'IN','for':'FOR','range':'RANGE','print':'PRINT','True':'BOOL','False':'BOOL','and':'AND','or':'OR','while':'WHILE','def':'DEF'}
 symbol_table=[]
 level=0
 
@@ -54,9 +54,11 @@ def t_newline(t):
     return t
 def t_level3(t):
     r'\s{12}'
-    #print("tab3")
+    print("tab3")
     t.type='LEVEL3'
     t.value='level3'
+    # t.lexer.lineno-=6
+    
     return t
     # global level
     # level=3
@@ -64,20 +66,30 @@ def t_level3(t):
 
 def t_level2(t):
     r'\s{8}'
-    #print("tab2")
+    print("tab2")
     t.type='LEVEL2'
     t.value='level2'
+    # t.lexer.lineno-=6
+
     return t
-    
+    # global level
+    # print(level)
+    # level=2
 def t_level1(t):
     r'\s{4}'
-    #print("tab1")
+    print("tab1")
     t.type='LEVEL1'
     t.value='level1'
+    # t.lexer.lineno-=6
+
+
     return t
     # global level
     # level=1
     # print(level)
+    
+
+
 
 def t_NUMBER(t):
     r'[\d.]+(?:E-?.\d+)?'
@@ -111,6 +123,7 @@ def t_NAME(t):
 def t_COMMENT(t):
     r'[#].*'
     t.lexer.skip(1)
+    t.lexer.lineno+=1
 
 def t_MCOMMENT(t):
     r'[\"|\']{3}(.*\n*.*)[\"|\']{3}'
@@ -126,7 +139,7 @@ def find_column(input, token):
 
 lexer = lex.lex()
 
-f = open('input.txt')
+f = open('inputFile.py')
 data = f.read()
 # print(data)
 lexer.input(data)
@@ -145,26 +158,37 @@ while True:
     # token=[tok.type,tok.value,tok.lineno,column_no]
     # symbol_table.append(token)
     # print(token)
-    
 level_flag="level0"
 symbol_tab['level0']=dict()
 for i in range(len(tokens_)):
     if tokens_[i].type=='LEVEL1':
-        print(level_flag)
+        # print("encountered colon")
+        # print(level_flag)
         level_flag='level1'
     elif tokens_[i].type=='LEVEL2':
         level_flag='level2'
     elif tokens_[i].type=='LEVEL3':
         level_flag='level3'
     if not level_flag in symbol_tab.keys():
+            # print('create')
             symbol_tab[level_flag]=dict()
-            print(symbol_tab)
+            # print(symbol_tab)
     if tokens_[i].type=='NEWLINE':
         level_flag="level0"
 
-    if tokens_[i].type=='ID' and tokens_[i+1].value=='=':
-        symbol_tab[level_flag][tokens_[i].value]=tokens_[i+2].type
+    if tokens_[i].type=='ID' and i+1<len(tokens_) and  tokens_[i+1].value=='=':
+
+        attributes=[]
+        if tokens_[i+2].type=='ID':
+            attributes.append(symbol_tab[level_flag][tokens_[i+2].value][0])
+        else:
+            attributes.append(tokens_[i+2].type)
+        attributes.append(tokens_[i].lineno)
+        # print(tokens_[i].lineno)
+        symbol_tab[level_flag][tokens_[i].value]=attributes
     # print(tokens_[i].type)
 
-print(symbol_tab)
 
+
+
+print(symbol_tab)
