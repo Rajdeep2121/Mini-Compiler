@@ -4,14 +4,16 @@ import ply.yacc as yacc
 from script import tokens
 from script import reserved
 
+indentFlag=0
+
 def p_assign(p):
     '''expression : ID EQUAL expression
                     | ID EQUAL STR_CONST
                     '''
-    if(len(p)==5):
-        p[0] = p[2]
-    else:
-        p[0] = p[1]
+    p[0] = p[2]
+    global indentFlag
+    indentFlag = 0
+
 def p_expression_plus(p):
     'expression : expression PLUS term'
     p[0] = p[1] + p[3]  
@@ -74,13 +76,24 @@ def p_while(p):
                     | WHILE factor COLON
                     | WHILE ID COLON'''
     print("While loop starts")
+    global indentFlag
+    indentFlag=1
 
 def p_for(p):
     '''expression : FOR ID IN RANGE PARANOPEN expression PARANCLOSE COLON 
                     | FOR ID IN STR_CONST COLON
                     | FOR ID IN ID COLON
                     | FOR ID IN PARANOPEN STR_CONST PARANCLOSE COLON'''
+    global indentFlag
+    indentFlag=1
     print("For loop starts")
+
+def p_indent_assign(p):
+    'expression : LEVEL1 ID EQUAL INT'
+    if indentFlag==1:
+        pass
+    else:
+        print("Syntax error in input")
 
 def p_blank(p):
     'expression : '
