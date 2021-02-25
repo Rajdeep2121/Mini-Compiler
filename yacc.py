@@ -1,38 +1,32 @@
 # Yacc example
 import ply.yacc as yacc
-import re 
 # Get the token map from the lexer. This is required.
-from script import *
-# from script import reserved
+from script import tokens
+from script import reserved
 
 def p_assign(p):
     '''expression : ID EQUAL expression
-                    | ID EQUAL STR_CONST'''
-    p[0] = p[1]
-   
+                    | ID EQUAL STR_CONST
+                    '''
+    if(len(p)==5):
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 def p_expression_plus(p):
     'expression : expression PLUS term'
-    p[0] = p[1] + p[3]
-    print(p[0])
-
-def p_expression_plus_addon(p):
-    'expression : ID PLUS EQUAL term'
-    p[1] += p[2]
-    print(symbol_tab)
-
+    p[0] = p[1] + p[3]  
+   
 def p_print_statement(p):
-    'expression : PRINT expression'
-    print(p[2])
+    '''expression : PRINT expression
+                    | PRINT PARANOPEN ID PARANCLOSE'''
 
 def p_expression_minus(p):
     '''expression : expression MINUS term
                     | MINUS term'''
     if (len(p) == 4):
          p[0] = p[1] - p[3]
-         print(p[0])
     elif (len(p) == 3):
          p[0] = -p[2]
-         print(p[0])
 
 def p_expression_term(p):
     'expression : term'
@@ -60,9 +54,9 @@ def p_factor_expr(p):
     p[0] = p[2]
 
 def p_while(p):
-    '''expression : WHILE PARANOPEN ID EQUAL EQUAL factor PARANCLOSE COLON
-                    | WHILE PARANOPEN ID EQUAL EQUAL STR_CONST PARANCLOSE COLON
-                    | WHILE PARANOPEN ID EQUAL EQUAL ID PARANCLOSE COLON
+    '''expression : WHILE PARANOPEN ID EQUAL factor PARANCLOSE COLON 
+                    | WHILE PARANOPEN ID EQUAL STR_CONST PARANCLOSE COLON
+                    | WHILE PARANOPEN ID EQUAL ID PARANCLOSE COLON
                     | WHILE PARANOPEN ID GREATER factor PARANCLOSE COLON
                     | WHILE PARANOPEN ID GREATER STR_CONST PARANCLOSE COLON
                     | WHILE PARANOPEN ID GREATER ID PARANCLOSE COLON
@@ -81,16 +75,20 @@ def p_while(p):
                     | WHILE ID COLON'''
     print("While loop starts")
 
-def p_comments(p):
-    'expression : HASH expression'
-    print("comment")
-
 def p_for(p):
-    '''expression : FOR ID IN RANGE PARANOPEN expression PARANCLOSE COLON
+    '''expression : FOR ID IN RANGE PARANOPEN expression PARANCLOSE COLON 
                     | FOR ID IN STR_CONST COLON
-                    | FOR ID IN ID COLON NEWLINE LEVEL1
+                    | FOR ID IN ID COLON
                     | FOR ID IN PARANOPEN STR_CONST PARANCLOSE COLON'''
-    print("For loop starts") 
+    print("For loop starts")
+
+def p_blank(p):
+    'expression : '
+
+def p_comment(p):
+    '''expression : HASH expression
+                    | HASH ID
+                    | HASH STR_CONST'''
 
 # Error rule for syntax errors
 def p_error(p):
@@ -98,22 +96,22 @@ def p_error(p):
 
 # Build the parser
 parser = yacc.yacc()
-"""
-while True:
-    try:
-        s = input('calc > ')
-    except EOFError:
-        break
-    yacc.parse(s)
-"""
-f = open('inputFile.py')
+
+f = open('input.txt')
 data = f.read()
 
 data=data.split('\n')
-for i in data:
-    try:
-        if(i!=''):
-            yacc.parse(i)
-    except EOFError:
-        break
 
+for i in data:
+    # i=i.strip()
+    yacc.parse(i)
+   
+# for i in data:
+#     if len(i) > 0:
+#         if i[0]=='#':
+#             pass 
+#         else:
+#             i=i.strip()
+#             print(i)
+#             yacc.parse(i)
+   

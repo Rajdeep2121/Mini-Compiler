@@ -1,0 +1,6 @@
+print(a)
+
+u=10
+b=20+10
+
+for i in range(2):
