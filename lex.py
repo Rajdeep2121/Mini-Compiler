@@ -180,14 +180,17 @@ for i in range(len(tokens_)):
         else:
             attributes.append(tokens_[i+2].type)
         attributes.append(tokens_[i].lineno)
+        print("this", tokens_[i],tokens_[i].lineno)
         # print(tokens_[i].lineno)
         symbol_tab[level_flag][tokens_[i].value]=attributes
+
     # print(tokens_[i].type)
 
 
 
 print("###########################")
 print("SYMBOL TABLE")
+# print(symbol_tab)
 print("\nID \t\t| TYPE \t\t| LINE NO. \t| SCOPE\n")
 
 if 'level0' in symbol_tab:  
@@ -201,6 +204,7 @@ if 'level0' in symbol_tab:
             print(j,end=' \t\t| ')
         print("level 0")
         print()
+
 if 'level1' in symbol_tab:
     values1 = list(symbol_tab['level1'].values())
     keys1 = list(symbol_tab['level1'].keys())
@@ -211,6 +215,18 @@ if 'level1' in symbol_tab:
         for j in i:
             print(j,end=' \t\t| ')
         print("level 1")
+        print()
+
+if 'level2' in symbol_tab:
+    values2 = list(symbol_tab['level2'].values())
+    keys2 = list(symbol_tab['level2'].keys())
+    for i in range(len(keys2)):
+        values2[i].insert(0,keys2[i])
+
+    for i in values2:
+        for j in i:
+            print(j,end=' \t\t| ')
+        print("level 2")
         print()
 # print(values0)
 print("###########################")
