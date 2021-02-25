@@ -138,15 +138,19 @@ def p_for(p):
     print("For loop starts")
 
 def p_indent_assign2(p):
-    'expression : LEVEL2 ID EQUAL INT'
+    '''expression : LEVEL2 ID EQUAL expression
+                  | LEVEL2 ID EQUAL ID
+                  | LEVEL2 ID EQUAL STR_CONST'''
     if indentFlag==2:
         pass
     else:
+        print("in else")
         print("Syntax error in input")
         
 def p_indent_assign(p):
-    '''expression : LEVEL1 ID EQUAL INT
-                | LEVEL1 ID EQUAL STR_CONST'''
+    '''expression : LEVEL1 ID EQUAL expression
+                  | LEVEL1 ID EQUAL ID
+                  | LEVEL1 ID EQUAL STR_CONST'''
     if indentFlag==1:
         pass
     else:
@@ -192,4 +196,3 @@ for i in data:
     if(i!=' '):
         print(i)
         yacc.parse(i)
-   
