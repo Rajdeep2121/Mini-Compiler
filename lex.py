@@ -54,7 +54,7 @@ def t_newline(t):
     return t
 def t_level3(t):
     r'\s{12}'
-    print("tab3")
+    # print("tab3")
     t.type='LEVEL3'
     t.value='level3'
     # t.lexer.lineno-=6
@@ -66,7 +66,7 @@ def t_level3(t):
 
 def t_level2(t):
     r'\s{8}'
-    print("tab2")
+    # print("tab2")
     t.type='LEVEL2'
     t.value='level2'
     # t.lexer.lineno-=6
@@ -77,7 +77,7 @@ def t_level2(t):
     # level=2
 def t_level1(t):
     r'\s{4}'
-    print("tab1")
+    # print("tab1")
     t.type='LEVEL1'
     t.value='level1'
     # t.lexer.lineno-=6
@@ -162,17 +162,13 @@ level_flag="level0"
 symbol_tab['level0']=dict()
 for i in range(len(tokens_)):
     if tokens_[i].type=='LEVEL1':
-        # print("encountered colon")
-        # print(level_flag)
         level_flag='level1'
     elif tokens_[i].type=='LEVEL2':
         level_flag='level2'
     elif tokens_[i].type=='LEVEL3':
         level_flag='level3'
     if not level_flag in symbol_tab.keys():
-            # print('create')
             symbol_tab[level_flag]=dict()
-            # print(symbol_tab)
     if tokens_[i].type=='NEWLINE':
         level_flag="level0"
 
@@ -191,4 +187,3 @@ for i in range(len(tokens_)):
 
 
 
-print(symbol_tab)

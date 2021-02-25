@@ -1,14 +1,8 @@
-print(a)
+a=10
 
-u=10
-b=20+10
+c=a
 
-while True:
-    s=1
-
-c=10
-
-for i in range(20):
-    s=10
-#print("hello")
-
+for i in range(10):
+    print('hello')
+    i=0
+i-=1

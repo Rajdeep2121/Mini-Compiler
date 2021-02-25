@@ -10,13 +10,15 @@ indentFlag=0
 def p_assign(p):
     '''expression : ID EQUAL expression
                     | ID EQUAL STR_CONST
+                    | ID EQUAL ID
                     '''
     p[0] = p[2]
     global indentFlag
     indentFlag = 0
 
 def p_expression_plus(p):
-    'expression : expression PLUS term'
+    '''expression : ID PLUS EQUAL term
+                    | expression PLUS term'''
     p[0] = p[1] + p[3]  
    
 def p_print_statement(p):
@@ -28,6 +30,7 @@ def p_print_statement(p):
 
 def p_expression_minus(p):
     '''expression : expression MINUS term
+                    | ID MINUS EQUAL term
                     | MINUS term'''
     if (len(p) == 4):
          p[0] = p[1] - p[3]
