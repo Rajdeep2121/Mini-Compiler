@@ -145,7 +145,8 @@ def p_indent_assign2(p):
         print("Syntax error in input")
         
 def p_indent_assign(p):
-    'expression : LEVEL1 ID EQUAL INT'
+    '''expression : LEVEL1 ID EQUAL INT
+                | LEVEL1 ID EQUAL STR_CONST'''
     if indentFlag==1:
         pass
     else:

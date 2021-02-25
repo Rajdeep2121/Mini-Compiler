@@ -186,4 +186,31 @@ for i in range(len(tokens_)):
 
 
 
+print("###########################")
+print("SYMBOL TABLE")
+print("\nID | TYPE | LINE NO. | SCOPE\n")
 
+if 'level0' in symbol_tab:  
+    values0 = list(symbol_tab['level0'].values())
+    keys0 = list(symbol_tab['level0'].keys())
+    for i in range(len(keys0)):
+        values0[i].insert(0,keys0[i])
+
+    for i in values0:
+        for j in i:
+            print(j,end=' | ')
+        print("|  level 0")
+        print()
+if 'level1' in symbol_tab:
+    values1 = list(symbol_tab['level1'].values())
+    keys1 = list(symbol_tab['level1'].keys())
+    for i in range(len(keys1)):
+        values1[i].insert(0,keys1[i])
+
+    for i in values1:
+        for j in i:
+            print(j,end=' | ')
+        print("| level 1")
+        print()
+# print(values0)
+print("###########################")
