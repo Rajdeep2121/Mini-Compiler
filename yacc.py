@@ -9,6 +9,9 @@ indentFlag=0
 
 def p_assign(p):
     '''expression : ID EQUAL expression
+                    | ID EQUAL EMP_LIST
+                    | ID EQUAL EMP_TUPLE
+                    | ID EQUAL EMP_SET
                     | ID EQUAL STR_CONST
                     | ID EQUAL ID
                     '''
