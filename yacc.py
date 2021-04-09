@@ -17,8 +17,8 @@ def p_assign(p):
                     | ID EQUAL ID
                     '''
     p[0] = p[2]
-    print("heere")
-    print(p[1])
+    # print("heere")
+    # print(p[1])
     for value in symbol_tab.values():
         for key in value.keys():
             if key==p[1]:
@@ -35,12 +35,12 @@ def p_expression_plus(p):
     
    
     if type(p[1])==str:
-        print("its a string")
+        # print("its a string")
         for value in symbol_tab.values():
             for key in value.keys():
                 if key==p[1]:
-                    print("jhjhk")
-                    print(value[key][3])
+                    # print("jhjhk")
+                    # print(value[key][3])
                     p[1]=value[key][3]
                     p[0]=p[1]+p[3]
     else:
@@ -59,10 +59,21 @@ def p_expression_minus(p):
     '''expression : expression MINUS term
                     | ID MINUS EQUAL term
                     | MINUS term'''
-    if (len(p) == 4):
-         p[0] = p[1] - p[3]
-    elif (len(p) == 3):
-         p[0] = -p[2]
+    # if (len(p) == 4):
+    #      p[0] = p[1] - p[3]
+    # elif (len(p) == 3):
+    #      p[0] = -p[2]
+    if type(p[1])==str:
+        # print("its a string")
+        for value in symbol_tab.values():
+            for key in value.keys():
+                if key==p[1]:
+                    # print("jhjhk")
+                    # print(value[key][3])
+                    p[1]=value[key][3]
+                    p[0]=p[1]+p[3]
+    else:
+        p[0] = p[1] + p[3]
 
 def p_expression_term(p):
     'expression : term'
@@ -236,7 +247,6 @@ for i in data:
         print(i)
         yacc.parse(i)
 
-print("symbol table after updating the values")
 print("###########################")
 print("SYMBOL TABLE")
 print(symbol_tab)
