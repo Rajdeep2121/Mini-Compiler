@@ -139,7 +139,7 @@ def find_column(input, token):
 
 lexer = lex.lex()
 
-f = open('inputFile.py')
+f = open('input1.py')
 data = f.read()
 # print(data)
 lexer.input(data)
@@ -190,8 +190,8 @@ for i in range(len(tokens_)):
 
 print("###########################")
 print("SYMBOL TABLE")
-# print(symbol_tab)
-print("\nID \t\t| TYPE \t\t| LINE NO. \t| SCOPE\n")
+print(symbol_tab)
+print("\nID \t\t| TYPE \t\t| LINE NO. \t| SCOPE\t\t| VALUE\n")
 
 if 'level0' in symbol_tab:  
     values0 = list(symbol_tab['level0'].values())

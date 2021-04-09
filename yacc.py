@@ -4,6 +4,7 @@ import ply.yacc as yacc
 # Get the token map from the lexer. This is required.
 from lex import tokens
 from lex import reserved
+from lex import symbol_tab
 
 indentFlag=0
 
@@ -16,13 +17,36 @@ def p_assign(p):
                     | ID EQUAL ID
                     '''
     p[0] = p[2]
+    print("heere")
+    print(p[1])
+    for value in symbol_tab.values():
+        for key in value.keys():
+            if key==p[1]:
+                value[key].append(p[3])
+    
+        
     global indentFlag
     indentFlag = 0
 
 def p_expression_plus(p):
     '''expression : ID PLUS EQUAL term
-                    | expression PLUS term'''
-    p[0] = p[1] + p[3]  
+                    | expression PLUS term
+                    | ID PLUS factor'''
+    
+   
+    if type(p[1])==str:
+        print("its a string")
+        for value in symbol_tab.values():
+            for key in value.keys():
+                if key==p[1]:
+                    print("jhjhk")
+                    print(value[key][3])
+                    p[1]=value[key][3]
+                    p[0]=p[1]+p[3]
+    else:
+        p[0] = p[1] + p[3]
+
+
    
 def p_print_statement(p):
     '''expression : PRINT PARANOPEN STR_CONST PARANCLOSE
@@ -145,7 +169,13 @@ def p_indent_assign2(p):
                   | LEVEL2 ID EQUAL ID
                   | LEVEL2 ID EQUAL STR_CONST'''
     if indentFlag==2:
-        pass
+        p[0] = p[2]
+        print("level2   ",p[2])
+        for value in symbol_tab.values():
+            for key in value.keys():
+                if key==p[2]:
+                    value[key].append(p[4])
+
     else:
         print("in else")
         print("Syntax error in input")
@@ -155,7 +185,13 @@ def p_indent_assign(p):
                   | LEVEL1 ID EQUAL ID
                   | LEVEL1 ID EQUAL STR_CONST'''
     if indentFlag==1:
-        pass
+        p[0] = p[2]
+        print("level1   ",p[2])
+        for value in symbol_tab.values():
+            for key in value.keys():
+                if key==p[2]:
+                    value[key].append(p[4])
+        
     else:
         print("Syntax error in input")
 def p_indent2_print_statement(p):
@@ -190,7 +226,7 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
-f = open('inputFile.py')
+f = open('input1.py')
 data = f.read()
 
 data=data.split('\n')
@@ -199,3 +235,47 @@ for i in data:
     if(i!=' '):
         print(i)
         yacc.parse(i)
+
+print("symbol table after updating the values")
+print("###########################")
+print("SYMBOL TABLE")
+print(symbol_tab)
+print("\nID \t\t| TYPE \t\t| LINE NO. \t| SCOPE\t\t| VALUE\n")
+
+if 'level0' in symbol_tab:  
+    values0 = list(symbol_tab['level0'].values())
+    keys0 = list(symbol_tab['level0'].keys())
+    for i in range(len(keys0)):
+        values0[i].insert(0,keys0[i])
+
+    for i in values0:
+        for j in i:
+            print(j,end=' \t\t| ')
+        print("level 0")
+        print()
+
+if 'level1' in symbol_tab:
+    values1 = list(symbol_tab['level1'].values())
+    keys1 = list(symbol_tab['level1'].keys())
+    for i in range(len(keys1)):
+        values1[i].insert(0,keys1[i])
+
+    for i in values1:
+        for j in i:
+            print(j,end=' \t\t| ')
+        print("level 1")
+        print()
+
+if 'level2' in symbol_tab:
+    values2 = list(symbol_tab['level2'].values())
+    keys2 = list(symbol_tab['level2'].keys())
+    for i in range(len(keys2)):
+        values2[i].insert(0,keys2[i])
+
+    for i in values2:
+        for j in i:
+            print(j,end=' \t\t| ')
+        print("level 2")
+        print()
+# print(values0)
+print("###########################")
